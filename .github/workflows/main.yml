@@ -12,6 +12,8 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPOSITORY: audio-backend
+  CLUSTER_NAME: audio-cluster
+  SERVICE_NAME: audio-backend-service
 
 jobs:
   build_and_test:
@@ -69,3 +71,10 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Force new ECS deployment (Backend)
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.CLUSTER_NAME }} \
+            --service ${{ env.SERVICE_NAME }} \
+            --force-new-deployment

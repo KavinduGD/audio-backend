@@ -138,6 +138,7 @@ class PreprocessingService:
                 }
 
                 jobs.append({
+                    'lol': "lool",
                     'job_id': item['job_id']['S'],
                     'job_name': item['job_name']['S'],
                     'job_description': item['job_description']['S'],
