@@ -10,6 +10,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   build_and_test:
@@ -39,7 +40,7 @@ jobs:
       - name: Run tests
         run: pytest
 
-  # build_and_test:
+  # docker_image_build_and_pushbuild_and_test:
   #   # closed event triggered by merged PRs only
   #   if: github.event.pull_request.merged == true
   #   runs-on: ubuntu-latest
