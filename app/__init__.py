@@ -6,6 +6,7 @@ from .routes import preprocess_data_routes
 from .routes import train_data_routes
 from .routes import deploy_model_routes
 from .routes import predict_routes
+from .routes import health_routes
 from flask_cors import CORS
 
 
@@ -34,5 +35,6 @@ def create_app(config_class='app.config.TestConfig'):
     app.register_blueprint(deploy_model_routes.bp, url_prefix='/api/deploy')
     app.register_blueprint(predict_routes.bp,
                            url_prefix='/api/predict')
+    app.register_blueprint(health_routes.bp, url_prefix='/api/health')
 
     return app
