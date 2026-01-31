@@ -1,5 +1,9 @@
 name: Audio-Backend Workflow
 
+concurrency:
+  group: audio-backend-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
   pull_request:
     branches:
