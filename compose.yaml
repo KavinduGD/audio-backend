@@ -1,0 +1,10 @@
+name: audio
+
+services:
+  backend:
+    build:
+      context: .
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
