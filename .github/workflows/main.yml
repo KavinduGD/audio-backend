@@ -1,4 +1,4 @@
-name: audio-backend workflow
+name: Audio-Backend Workflow
 
 on:
   pull_request:
