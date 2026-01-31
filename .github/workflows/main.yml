@@ -36,11 +36,9 @@ jobs:
 
       - name: Show current installed packages
         run: pip list
-#     - name: Run tests
-#       # Assumes tests are in 'tests' directory and discoverable by pytest
-#       run: |
-#         pytest
 
+      - name: Run tests
+        run: pytest
 # build-and-push:
 #   name: Build and Push Image
 #   needs: test
