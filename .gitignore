@@ -1,2 +1,5 @@
 python-3.10-env
 .env
+
+**/__pycache__
+./**/__pycache__

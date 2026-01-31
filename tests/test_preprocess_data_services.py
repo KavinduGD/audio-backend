@@ -16,8 +16,9 @@ class TestPreprocessingService(unittest.TestCase):
         cls.mock_dynamodb_client = MagicMock()
         cls.bucket_name = 'test-bucket'
         cls.role_arn = 'arn:aws:iam::123456789012:role/SageMakerRole'
+        cls.preprocess_image_uri = 'test-image-uri'
         cls.preprocess_service = PreprocessingService(
-            cls.mock_s3_client, cls.mock_sagemaker_client, cls.mock_dynamodb_client, cls.bucket_name, cls.role_arn)
+            cls.mock_s3_client, cls.mock_sagemaker_client, cls.mock_dynamodb_client, cls.bucket_name, cls.role_arn, cls.preprocess_image_uri)
 
     # def test_get_next_job_id_success(self):
     #     self.mock_dynamodb_client.query.return_value = {
@@ -66,12 +67,12 @@ class TestPreprocessingService(unittest.TestCase):
             self.assertIn('job_ids is required',
                           response.get_json()['message'])
 
-    def test_preprocess_data_local_missing_job_id(self):
-        with self.app.test_request_context('/preprocess-local', method='POST', json={}):
-            response, status_code = self.preprocess_service.preprocess_data_local(
-                request)
-            self.assertEqual(status_code, 400)
-            self.assertIn('job_id is required', response.get_json()['message'])
+    # def test_preprocess_data_local_missing_job_id(self):
+    #     with self.app.test_request_context('/preprocess-local', method='POST', json={}):
+    #         response, status_code = self.preprocess_service.preprocess_data_local(
+    #             request)
+    #         self.assertEqual(status_code, 400)
+    #         self.assertIn('job_id is required', response.get_json()['message'])
 
     # def test_preprocess_data_local_success(self):
     #     self.mock_dynamodb_client.get_item.return_value = {

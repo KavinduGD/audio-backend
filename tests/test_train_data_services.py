@@ -16,8 +16,9 @@ class TestTrainingService(unittest.TestCase):
         cls.mock_dynamodb_client = MagicMock()
         cls.bucket_name = 'test-bucket'
         cls.role_arn = 'arn:aws:iam::123456789012:role/SageMakerRole'
+        cls.train_image_uri = 'test-image-uri'
         cls.train_service = TrainingService(
-            cls.mock_s3_client, cls.mock_sagemaker_client, cls.mock_dynamodb_client, cls.bucket_name, cls.role_arn)
+            cls.mock_s3_client, cls.mock_sagemaker_client, cls.mock_dynamodb_client, cls.bucket_name, cls.role_arn, cls.train_image_uri)
 
     # 1. Test cases for `add_train_details`
     def test_add_train_details_missing_params(self):
@@ -49,13 +50,13 @@ class TestTrainingService(unittest.TestCase):
             self.assertEqual(status_code, 400)
             self.assertIn('Job ID is required', response.get_json()['message'])
 
-    # 3. Test cases for `train_model_local`
-    def test_train_model_local_missing_job_id(self):
-        with self.app.test_request_context('/train-model-local', method='POST', json={}):
-            response, status_code = self.train_service.train_model_local(
-                request)
-            self.assertEqual(status_code, 400)
-            self.assertIn('job_id is required', response.get_json()['message'])
+    # 3. Test cases for `train_model_local` (Deprecated/Removed)
+    # def test_train_model_local_missing_job_id(self):
+    #     with self.app.test_request_context('/train-model-local', method='POST', json={}):
+    #         response, status_code = self.train_service.train_model_local(
+    #             request)
+    #         self.assertEqual(status_code, 400)
+    #         self.assertIn('job_id is required', response.get_json()['message'])
 
     # def test_train_model_local_success(self):
     #     self.mock_dynamodb_client.get_item.return_value = {
