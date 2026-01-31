@@ -21,23 +21,23 @@ class TestDataService(unittest.TestCase):
         # Initialize DataService with the mocked S3 client
         cls.data_service = DataService(cls.mock_s3_client, cls.bucket_name)
 
-    # 1. Test cases for upload_zip_slow
-    def test_upload_zip_slow_missing_file(self):
-        with self.app.test_request_context('/upload-zip-slow', method='POST'):
-            request.files = {}  # No file in the request
-            response, status_code = self.data_service.upload_zip_slow(request)
-            self.assertEqual(status_code, 400)
-            self.assertIn('There are no file key in the request body',
-                          response.get_json()['message'])
-
-    def test_upload_zip_slow_invalid_class_name(self):
-        with self.app.test_request_context('/upload-zip-slow', method='POST', data={'file': (io.BytesIO(b'some data'), 'sounds.zip')}):
-            request.files = {'file': (io.BytesIO(b'some data'), 'sounds.zip')}
-            response, status_code = self.data_service.upload_zip_slow(request)
-            self.assertEqual(status_code, 400)
-            self.assertIn('There are no class_name key in the request body',
-                          response.get_json()['message'])
-
+    # 1. Test cases for upload_zip_slow (Deprecated/Removed)
+    # def test_upload_zip_slow_missing_file(self):
+    #     with self.app.test_request_context('/upload-zip-slow', method='POST'):
+    #         request.files = {}  # No file in the request
+    #         response, status_code = self.data_service.upload_zip_slow(request)
+    #         self.assertEqual(status_code, 400)
+    #         self.assertIn('There are no file key in the request body',
+    #                       response.get_json()['message'])
+    
+    # def test_upload_zip_slow_invalid_class_name(self):
+    #     with self.app.test_request_context('/upload-zip-slow', method='POST', data={'file': (io.BytesIO(b'some data'), 'sounds.zip')}):
+    #         request.files = {'file': (io.BytesIO(b'some data'), 'sounds.zip')}
+    #         response, status_code = self.data_service.upload_zip_slow(request)
+    #         self.assertEqual(status_code, 400)
+    #         self.assertIn('There are no class_name key in the request body',
+    #                       response.get_json()['message'])
+    
     # def test_upload_zip_slow_invalid_zip_structure(self):
     #     with self.app.test_request_context('/upload-zip-slow', method='POST', data={'class_name': 'test_class', 'file': (io.BytesIO(b'some data'), 'sounds.zip')}):
     #         request.files = {'file': (io.BytesIO(b'some data'), 'sounds.zip')}
