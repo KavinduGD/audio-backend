@@ -11,6 +11,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: audio-backend
 
 jobs:
   build_and_test:
@@ -37,10 +38,11 @@ jobs:
       - name: Run tests
         run: pytest
 
-  docker_image_build_and_pushbuild_and_test:
+  docker_image_build_and_push:
     # closed event triggered by merged PRs only
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    needs: build_and_test
 
     steps:
       - name: Checkout code
@@ -55,21 +57,15 @@ jobs:
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: test
-        run: cat ~/.aws/credentials
-#     - name: Login to Amazon ECR
-#       id: login-ecr
-#       uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-#     - name: Build, tag, and push image to Amazon ECR
-#       env:
-#         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-#         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-#         IMAGE_TAG: ${{ github.sha }}
-#       run: |
-#         # Build a docker container and
-#         # push it to ECR so that it can
-#         # be deployed to ECS.
-#         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-#         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-#         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
